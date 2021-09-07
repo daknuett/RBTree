@@ -32,6 +32,7 @@ namespace rbt
         void dot_node_descrs(std::ostream & stream);
 
         friend class RBTree;
+        friend class RBTIterator;
     };
 
     class RBTree
@@ -56,5 +57,25 @@ namespace rbt
         int rbt_pathlength(void);
         RBTree(void);
         ~RBTree(void);
+
+        class RBTIterator
+        {
+            private:
+            RBTree * m_tree;
+            Node * m_cnode;
+            bool m_finished;
+            public:
+            RBTIterator(RBTree * tree, Node * cnode);
+            RBTIterator operator++(int);
+            RBTIterator & operator++(void);
+            bool operator==(const RBTIterator & b);
+            bool operator!=(const RBTIterator & b);
+            int operator*(void);
+        };
+        RBTIterator begin(void);
+        RBTIterator end(void);
+
+        friend class RBTIterator;
     };
+
 }
