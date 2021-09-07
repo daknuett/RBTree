@@ -4,73 +4,7 @@
 
 namespace rbt
 {
-    void Node::recursively_delete(void)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->recursively_delete();
-            delete m_lower;
-        }
-        if(m_higher != NULL)
-        {
-            m_higher->recursively_delete();
-            delete m_higher;
-        }
-    }
 
-    Node::Node(Node * parent, int value, char marker):
-        m_parent(parent), m_value(value), m_marker(marker)
-    {
-        m_color = NODE_RED;
-        m_higher = m_lower = NULL;
-    }
-
-    void Node::recursive_inorder_export(std::vector<int> & vect)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->recursive_inorder_export(vect);
-        }
-        vect.push_back(m_value);
-        if(m_higher != NULL)
-        {
-            m_higher->recursive_inorder_export(vect);
-        }
-    }
-    inline Node * Node::get_uncle(void)
-    {
-        if(this->m_parent->m_parent->m_lower != this->m_parent)
-        {
-            return this->m_parent->m_parent->m_lower;
-        }
-        return this->m_parent->m_parent->m_higher;
-    }
-    inline bool Node::is_lower_child(void)
-    {
-        if(this->m_parent == NULL)
-        {
-            return false;
-        }
-        if(this->m_parent->m_lower == this)
-        {
-            return true;
-        }
-        return false;
-    }
-
-
-    void Node::repair_markers(char marker)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->repair_markers(marker);
-        }
-        m_marker = marker;
-        if(m_higher != NULL)
-        {
-            m_higher->repair_markers(marker);
-        }
-    }
     RBTree::RBTree(void)
     {
         m_root = NULL;
@@ -331,74 +265,6 @@ namespace rbt
             m_root->recursive_inorder_export(vect);
         }
     }
-    void Node::dot_edges(std::ostream & stream)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->dot_edges(stream);
-            stream << "\t" << m_value << " -> " << m_lower->m_value << "\n";
-        }
-        if(m_higher != NULL)
-        {
-            m_higher->dot_edges(stream);
-            stream << "\t" << m_value << " -> " << m_higher->m_value << "\n";
-        }
-    }
-    void Node::dot_node_descrs(std::ostream & stream)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->dot_node_descrs(stream);
-        }
-        stream << "\t" << m_value << "[label=\"" << m_value << " (" << m_color <<")\" ]\n";
-        if(m_higher != NULL)
-        {
-            m_higher->dot_node_descrs(stream);
-        }
-    }
-inline bool Node::has_red_child(void)
-{
-    if(m_lower != NULL && m_lower->m_color == NODE_RED)
-    {
-        return true;
-    }
-    if(m_higher != NULL && m_higher->m_color == NODE_RED)
-    {
-        return true;
-    }
-    return false;
-}
-
-int Node::check_rbt_pathlength(void)
-{
-    int lleft = 1, lright = 1;
-    if(m_lower != NULL)
-    {
-        lleft = m_lower->check_rbt_pathlength();
-        if(lleft == -1)
-        {
-            return -1;
-        }
-    }
-    if(m_higher != NULL)
-    {
-        lright = m_higher->check_rbt_pathlength();
-        if(lright == -1)
-        {
-            return -1;
-        }
-    }
-    if(lleft != lright)
-    {
-        return -1;
-    }
-
-    if(m_color == NODE_BLACK)
-    {
-        return lleft + 1;
-    }
-    return lleft;
-}
 
 int RBTree::rbt_pathlength(void)
 {
@@ -812,5 +678,142 @@ int RBTree::rbt_pathlength(void)
         m_marker_sanity = 1;
         m_marker_mask ^= 0b11;
         
+    }
+
+    void Node::recursively_delete(void)
+    {
+        if(m_lower != NULL)
+        {
+            m_lower->recursively_delete();
+            delete m_lower;
+        }
+        if(m_higher != NULL)
+        {
+            m_higher->recursively_delete();
+            delete m_higher;
+        }
+    }
+
+    Node::Node(Node * parent, int value, char marker):
+        m_parent(parent), m_value(value), m_marker(marker)
+    {
+        m_color = NODE_RED;
+        m_higher = m_lower = NULL;
+    }
+
+    void Node::recursive_inorder_export(std::vector<int> & vect)
+    {
+        if(m_lower != NULL)
+        {
+            m_lower->recursive_inorder_export(vect);
+        }
+        vect.push_back(m_value);
+        if(m_higher != NULL)
+        {
+            m_higher->recursive_inorder_export(vect);
+        }
+    }
+    inline Node * Node::get_uncle(void)
+    {
+        if(this->m_parent->m_parent->m_lower != this->m_parent)
+        {
+            return this->m_parent->m_parent->m_lower;
+        }
+        return this->m_parent->m_parent->m_higher;
+    }
+    inline bool Node::is_lower_child(void)
+    {
+        if(this->m_parent == NULL)
+        {
+            return false;
+        }
+        if(this->m_parent->m_lower == this)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    void Node::repair_markers(char marker)
+    {
+        if(m_lower != NULL)
+        {
+            m_lower->repair_markers(marker);
+        }
+        m_marker = marker;
+        if(m_higher != NULL)
+        {
+            m_higher->repair_markers(marker);
+        }
+    }
+
+    void Node::dot_edges(std::ostream & stream)
+    {
+        if(m_lower != NULL)
+        {
+            m_lower->dot_edges(stream);
+            stream << "\t" << m_value << " -> " << m_lower->m_value << "\n";
+        }
+        if(m_higher != NULL)
+        {
+            m_higher->dot_edges(stream);
+            stream << "\t" << m_value << " -> " << m_higher->m_value << "\n";
+        }
+    }
+    void Node::dot_node_descrs(std::ostream & stream)
+    {
+        if(m_lower != NULL)
+        {
+            m_lower->dot_node_descrs(stream);
+        }
+        stream << "\t" << m_value << "[label=\"" << m_value << " (" << m_color <<")\" ]\n";
+        if(m_higher != NULL)
+        {
+            m_higher->dot_node_descrs(stream);
+        }
+    }
+    inline bool Node::has_red_child(void)
+    {
+        if(m_lower != NULL && m_lower->m_color == NODE_RED)
+        {
+            return true;
+        }
+        if(m_higher != NULL && m_higher->m_color == NODE_RED)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    int Node::check_rbt_pathlength(void)
+    {
+        int lleft = 1, lright = 1;
+        if(m_lower != NULL)
+        {
+            lleft = m_lower->check_rbt_pathlength();
+            if(lleft == -1)
+            {
+                return -1;
+            }
+        }
+        if(m_higher != NULL)
+        {
+            lright = m_higher->check_rbt_pathlength();
+            if(lright == -1)
+            {
+                return -1;
+            }
+        }
+        if(lleft != lright)
+        {
+            return -1;
+        }
+
+        if(m_color == NODE_BLACK)
+        {
+            return lleft + 1;
+        }
+        return lleft;
     }
 }
