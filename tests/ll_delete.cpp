@@ -34,6 +34,11 @@ main(int argc, char ** argv)
         expect.push_back(copy[i + copy.size() / 2]);
     }
 
+    if(list.size() != expect.size())
+    {
+        return -1;
+    }
+
     std::vector<int> exported;
     list.export_vector(exported);
     std::sort(expect.begin(), expect.end());

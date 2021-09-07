@@ -10,6 +10,7 @@ namespace rbt
         m_root = NULL;
         m_marker_mask = 0;
         m_marker_sanity = 1;
+        m_count = 0;
     }
     RBTree::~RBTree(void)
     {
@@ -263,6 +264,7 @@ namespace rbt
     void RBTree::insert(int value)
     {
         Node * n_node = do_insert(value);
+        m_count++;
         // enable this line if you do not want a red black tree.
         //return;
         if(n_node != NULL)
@@ -527,6 +529,7 @@ int RBTree::rbt_pathlength(void)
         char color = c_node->m_color;
         Node * parent = c_node->m_parent;
         delete c_node;
+        m_count--;
 
         // Check if we need to repair the RB property.
         if(color == NODE_RED)
@@ -692,6 +695,12 @@ int RBTree::rbt_pathlength(void)
         m_marker_mask ^= 0b111;
         
     }
+
+    size_t RBTree::size(void)
+    {
+        return m_count;
+    }
+
 
     void Node::recursively_delete(void)
     {

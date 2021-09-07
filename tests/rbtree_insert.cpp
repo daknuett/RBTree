@@ -31,6 +31,10 @@ main(int argc, char ** argv)
     {
         return -1;
     }
+    if(tree.size() != orig.size())
+    {
+        return -1;
+    }
 
     std::vector<int> exported;
     tree.export_inorder_recursive(exported);

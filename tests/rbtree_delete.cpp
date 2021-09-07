@@ -37,6 +37,10 @@ main(int argc, char ** argv)
     {
         return -1;
     }
+    if(tree.size() != expect.size())
+    {
+        return -1;
+    }
 
     std::sort(expect.begin(), expect.end());
 

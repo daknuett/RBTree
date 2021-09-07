@@ -41,6 +41,7 @@ namespace rbt
         Node * m_root;
         char m_marker_mask;
         char m_marker_sanity;
+        size_t m_count;
         Node * do_insert(int value);
         inline void delete_this_node(Node * c_node);
         void repair_after_insert(Node * causing_node);
@@ -57,6 +58,7 @@ namespace rbt
         int rbt_pathlength(void);
         RBTree(void);
         ~RBTree(void);
+        size_t size(void);
 
         class RBTIterator
         {

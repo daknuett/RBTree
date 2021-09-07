@@ -20,6 +20,7 @@ namespace ll
     {
         private:
         Node * m_first;
+        size_t m_count;
         public:
         void insert(int value);
         bool has_value(int value);
@@ -28,6 +29,7 @@ namespace ll
         SortedList(void);
         ~SortedList(void);
         void export_vector(std::vector<int> & vect);
+        size_t size(void);
 
         class Iterator
         {

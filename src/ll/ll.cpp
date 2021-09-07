@@ -44,6 +44,7 @@ namespace ll
         {
             p_node->m_next = new Node(value, c_node);
         }
+        m_count++;
     }
 
     bool SortedList::has_value(int value)
@@ -102,6 +103,7 @@ namespace ll
                     p_node->m_next = c_node->m_next;
                 }
                 delete c_node;
+                m_count--;
                 return;
             }
             break;
@@ -111,6 +113,7 @@ namespace ll
     SortedList::SortedList(void)
     {
         m_first = NULL;
+        m_count = 0;
     }
     SortedList::~SortedList(void)
     {
@@ -169,4 +172,8 @@ namespace ll
         return Iterator(NULL);
     }
     
+    size_t SortedList::size(void)
+    {
+        return m_count;
+    }
 }
