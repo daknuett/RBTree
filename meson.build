@@ -22,7 +22,8 @@ test_filenames = [['test_rbt_insert', 'tests/rbtree_insert.cpp']
                 , ['test_rbt_iterator', 'tests/rbtree_iterator.cpp']]
 
 bench_filenames = [['bench_rbt_export', 'benchmarks/rbtree_export.cpp']
-                , ['bench_iterator_ll_vs_tree', 'benchmarks/rbtree_vs_ll_iterator.cpp']]
+                , ['bench_iterator_ll_vs_tree', 'benchmarks/rbtree_vs_ll_iterator.cpp']
+                , ['bench_rbt_vs_set', 'benchmarks/rbtree_vs_set.cpp']]
 
 tests = []
 foreach tfname: test_filenames
