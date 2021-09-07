@@ -132,4 +132,41 @@ namespace ll
             c_node = c_node->m_next;
         }
     }
+
+    SortedList::Iterator::Iterator(Node * cnode):
+        m_cnode(cnode)
+        {}
+    SortedList::Iterator SortedList::Iterator::operator++(int)
+    {
+        Iterator tmp = *this;
+        ++(*this);
+        return tmp;
+    }
+    SortedList::Iterator & SortedList::Iterator::operator++(void)
+    {
+        m_cnode = m_cnode->m_next;
+        return *this;
+    }
+    bool SortedList::Iterator::operator==(const Iterator & b)
+    {
+        return m_cnode == b.m_cnode;
+    }
+    bool SortedList::Iterator::operator!=(const Iterator & b)
+    {
+        return m_cnode != b.m_cnode;
+    }
+    int SortedList::Iterator::operator*(void)
+    {
+        return m_cnode->m_value;
+    }
+
+    SortedList::Iterator SortedList::begin(void)
+    {
+        return Iterator(m_first);
+    }
+    SortedList::Iterator SortedList::end(void)
+    {
+        return Iterator(NULL);
+    }
+    
 }

@@ -29,5 +29,22 @@ namespace ll
         ~SortedList(void);
         void export_vector(std::vector<int> & vect);
 
+        class Iterator
+        {
+            private: 
+            Node * m_cnode;
+            public:
+            Iterator(Node * cnode);
+            Iterator operator++(int);
+            Iterator & operator++(void);
+            bool operator==(const Iterator & b);
+            bool operator!=(const Iterator & b);
+            int operator*(void);
+
+        };
+
+        Iterator begin(void);
+        Iterator end(void);
+
     };
 }
