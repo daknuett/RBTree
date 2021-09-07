@@ -25,6 +25,13 @@ After making a builddir (see Building_):
 
    meson test -C builddir
 
+Benchmarks
+----------
+
+The benchmarks are really just little tests what is faster. They are found
+under ``benchmarks/``. They are compiled during building. You have to run them
+manually. The resulting executables all start with ``bench_``.
+
 
 What's implemented?
 -------------------
