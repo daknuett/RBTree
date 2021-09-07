@@ -19,6 +19,19 @@ namespace rbt
             delete m_root;
         }
     }
+    RBTree::RBTIterator RBTree::begin()
+    {
+        repair_markers_if_needed();
+        // This is a hacky workaround because
+        // the iterator would point to the root but it must
+        // point to the smallest element.
+        m_marker_sanity = 0;
+        return ++RBTIterator(this, m_root);
+    }
+    RBTree::RBTIterator RBTree::end()
+    {
+        return RBTIterator(this, NULL);
+    }
     Node * RBTree::do_insert(int value)
     {
         // Empty tree. Just add a (black) root node.
@@ -666,7 +679,7 @@ int RBTree::rbt_pathlength(void)
                 // 2nd time visiting the node.
 
                 vect.push_back(c_node->m_value);
-                c_node->m_marker ^= 0b10;
+                c_node->m_marker ^= 0b110; // We need the 3rd bit for iterators.
                 if(c_node->m_higher != NULL)
                 {
                     c_node = c_node->m_higher;
@@ -676,7 +689,7 @@ int RBTree::rbt_pathlength(void)
             c_node = c_node->m_parent;
         }
         m_marker_sanity = 1;
-        m_marker_mask ^= 0b11;
+        m_marker_mask ^= 0b111;
         
     }
 
