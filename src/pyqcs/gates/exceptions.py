@@ -1,3 +1,0 @@
-
-class UnitarityError(Exception):
-    pass
