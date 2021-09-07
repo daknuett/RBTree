@@ -37,3 +37,10 @@ What's implemented?
 - Checking some Red Black Tree properties.
 
 The linked list also has some features but they are less important.
+
+More Notes
+----------
+
+- ``visual_tests/`` contains some stuff to visually check. Check the comments
+  in the source code.
+- ``main.cpp`` usually contains whatever I am currently working on.
