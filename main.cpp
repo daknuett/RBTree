@@ -2,12 +2,13 @@
 #include <time_m.hpp>
 #include <iostream>
 
+#ifndef NTEST
+#define NTEST 10000
+#endif
 
 int
 main(int argc, char ** argv)
 {
-    int const NTEST = 10;
-
     std::vector<int> orig;
     rbt::RBTree tree;
 
