@@ -12,6 +12,17 @@ namespace rbt
         m_marker_sanity = 1;
         m_count = 0;
     }
+    RBTree::RBTree(RBTree & orig)
+    {
+        m_root = NULL;
+        if(orig.m_root != NULL)
+        {
+            m_root = new Node(*orig.m_root);
+        }
+        m_marker_mask = orig.m_marker_mask;
+        m_marker_sanity = orig.m_marker_sanity;
+        m_count = orig.m_count;
+    }
     RBTree::~RBTree(void)
     {
         if(m_root != NULL)
@@ -721,6 +732,52 @@ int RBTree::rbt_pathlength(void)
     {
         m_color = NODE_RED;
         m_higher = m_lower = NULL;
+    }
+    Node::Node(Node & orig)
+    {
+        m_parent = NULL;
+        m_color = orig.m_color;
+        m_value = orig.m_value;
+        m_marker = orig.m_marker;
+        if(orig.m_lower != NULL)
+        {
+            m_lower = new Node(this, orig.m_lower);
+        }
+        else
+        {
+            m_lower = NULL;
+        }
+        if(orig.m_higher != NULL)
+        {
+            m_higher = new Node(this, orig.m_higher);
+        }
+        else
+        {
+            m_higher = NULL;
+        }
+    }
+    Node::Node(Node * parent, Node * orig)
+    {
+        m_parent = parent;
+        m_color = orig->m_color;
+        m_value = orig->m_value;
+        m_marker = orig->m_marker;
+        if(orig->m_lower != NULL)
+        {
+            m_lower = new Node(this, orig->m_lower);
+        }
+        else
+        {
+            m_lower = NULL;
+        }
+        if(orig->m_higher != NULL)
+        {
+            m_higher = new Node(this, orig->m_higher);
+        }
+        else
+        {
+            m_higher = NULL;
+        }
     }
 
     void Node::recursive_inorder_export(std::vector<int> & vect)

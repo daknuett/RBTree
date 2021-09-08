@@ -26,6 +26,8 @@ namespace rbt
         void repair_markers(char marker);
         public:
         Node(Node * parent, int value, char marker);
+        Node(Node & orig);
+        Node(Node * parent, Node * orig);
         void recursively_delete(void);
 
         void dot_edges(std::ostream & stream);
@@ -57,6 +59,7 @@ namespace rbt
         void to_dot(std::ostream & stream);
         int rbt_pathlength(void);
         RBTree(void);
+        RBTree(RBTree & orig);
         ~RBTree(void);
         size_t size(void);
 
