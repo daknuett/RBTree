@@ -27,13 +27,10 @@ main(int argc, char ** argv)
         list.insert(i);
     }
 
-    if(list.size() != orig.size())
-    {
-        return -1;
-    }
+    ll::SortedList list_copy = list;
 
     std::vector<int> exported;
-    list.export_vector(exported);
+    list_copy.export_vector(exported);
 
     if(exported.size() != orig.size())
     {
@@ -48,3 +45,4 @@ main(int argc, char ** argv)
     }
     return 0;
 }
+

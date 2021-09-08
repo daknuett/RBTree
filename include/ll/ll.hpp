@@ -12,6 +12,7 @@ namespace ll
         public:
         Node(int value);
         Node(int value, Node * next);
+        Node(Node & orig);
         void print(void);
         friend class SortedList;
 
@@ -27,6 +28,7 @@ namespace ll
         void print(void);
         void delete_value(int value);
         SortedList(void);
+        SortedList(SortedList & orig);
         ~SortedList(void);
         void export_vector(std::vector<int> & vect);
         size_t size(void);

@@ -7,6 +7,16 @@ namespace ll
         m_next = NULL;
     }
     Node::Node(int value, Node * next): m_next(next), m_value(value){}
+    Node::Node(Node & orig)
+    {
+        m_value = orig.m_value;
+        m_next = NULL;
+        if(orig.m_next != NULL)
+        {
+            m_next = new Node(*orig.m_next);
+        }
+    }
+
     void Node::print(void)
     {
         if(m_next != NULL)
@@ -114,6 +124,15 @@ namespace ll
     {
         m_first = NULL;
         m_count = 0;
+    }
+    SortedList::SortedList(SortedList & orig)
+    {
+        m_count = orig.m_count;
+        m_first = NULL;
+        if(orig.m_first != NULL)
+        {
+            m_first = new Node(*orig.m_first);
+        }
     }
     SortedList::~SortedList(void)
     {

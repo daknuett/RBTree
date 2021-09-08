@@ -1,7 +1,7 @@
 #include <vector>
 #include <random>
 #include <algorithm>
-#include <ll/ll.hpp>
+#include <rbt/rbt.hpp>
 
 #ifndef NTEST
 #define NTEST 10000
@@ -21,19 +21,26 @@ main(int argc, char ** argv)
     std::mt19937 rne;
     std::shuffle(copy.begin(), copy.end(), rne);
 
-    ll::SortedList list;
+    rbt::RBTree tree;
     for(auto i: copy)
     {
-        list.insert(i);
+        tree.insert(i);
     }
 
-    if(list.size() != orig.size())
+    if(tree.rbt_pathlength() < 0)
+    {
+        return -1;
+    }
+    if(tree.size() != orig.size())
     {
         return -1;
     }
 
+    rbt::RBTree tree_copy = tree;
+
+    
     std::vector<int> exported;
-    list.export_vector(exported);
+    tree_copy.export_inorder_recursive(exported);
 
     if(exported.size() != orig.size())
     {

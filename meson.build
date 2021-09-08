@@ -18,6 +18,8 @@ test_filenames = [['test_rbt_insert', 'tests/rbtree_insert.cpp']
                 , ['test_rbt_delete', 'tests/rbtree_delete.cpp']
                 , ['test_ll_delete', 'tests/ll_delete.cpp']
                 , ['test_ll_iterator', 'tests/ll_iterator.cpp']
+                , ['test_ll_copy', 'tests/ll_copy.cpp']
+                , ['test_rbt_copy', 'tests/rbtree_copy.cpp']
                 , ['test_rbt_iterative_export', 'tests/rbtree_iterative_export.cpp']
                 , ['test_rbt_iterator', 'tests/rbtree_iterator.cpp']]
 
