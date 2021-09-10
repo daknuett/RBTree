@@ -60,6 +60,9 @@ namespace rbt
         RBTree(RBTree & orig);
         ~RBTree(void);
         size_t size(void);
+        // WARNING: This method does not check whether
+        // the operation is possible.
+        int get_element_excluding(int exclude);
 
         class RBTIterator
         {
