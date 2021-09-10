@@ -14,41 +14,23 @@ namespace rbt
     }
     
     RBTree::RBTIterator & RBTree::RBTIterator::operator++(void)
-   {
-        while(m_cnode != NULL)
+    {
+        // From https://stackoverflow.com/a/2942598.
+        if(m_cnode == NULL)
         {
-            if((m_cnode->m_marker ^ m_tree->m_marker_mask) == 0)
-            {
-                //std::cerr << "found unvisited node " << m_cnode->m_value << " descending" << std::endl;
-                // 1st time visiting the node.
-                m_cnode->m_marker ^= 0b01;
-                if(m_cnode->m_lower != NULL)
-                {
-                    m_cnode = m_cnode->m_lower;
-                }
-                continue;
-            }
-            if((m_cnode->m_marker ^ m_tree->m_marker_mask) == 0b01)
-            {
-                //std::cerr << "found once-visited node " << m_cnode->m_value << " yielding it" << std::endl;
-                // 2nd time visiting the node.
-                m_cnode->m_marker ^= 0b10;
-                return *this;
-            }
-            if((m_cnode->m_marker ^ m_tree->m_marker_mask) == 0b11)
-            {
-                //std::cerr << "found twice-visited node " << m_cnode->m_value << " ascending" << std::endl;
-                m_cnode->m_marker ^= 0b100;
-                if(m_cnode->m_higher != NULL)
-                {
-                    m_cnode = m_cnode->m_higher;
-                }
-                continue;
-            }
+            return *this;
+        }
+
+        if(m_cnode->m_higher != NULL)
+        {
+            m_cnode = m_cnode->m_higher->get_leftmost();
+            return *this;
+        }
+        while(m_cnode->m_parent != NULL && m_cnode->m_parent->m_higher == m_cnode)
+        {
             m_cnode = m_cnode->m_parent;
         }
-        m_tree->m_marker_mask ^= 0b111;
-        m_tree->m_marker_sanity = 1;
+        m_cnode = m_cnode->m_parent;
         return *this;
     }
     bool RBTree::RBTIterator::operator==(const RBTIterator & b)

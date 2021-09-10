@@ -9,31 +9,47 @@
 int
 main(int argc, char ** argv)
 {
-    std::vector<int> orig;
-    rbt::RBTree tree;
+    //std::vector<int> orig;
+    //rbt::RBTree tree;
 
-    for(auto i = 0; i < NTEST; i++)
+    //for(auto i = 0; i < NTEST; i++)
+    //{
+    //    orig.push_back(i);
+    //    tree.insert(i);
+    //}
+
+    //std::vector<int> export_iter, export_rec;
+
+    //
+    //CLOG_TIMEIT_START;
+    //tree.export_inorder_recursive(export_rec);
+    //CLOG_TIMEIT_END("recursive export");
+    //CLOG_TIMEIT_START;
+    //tree.export_inorder_iterative(export_iter);
+    //CLOG_TIMEIT_END("iterative export");
+
+    //for(auto i: orig)
+    //{
+    //    if(export_iter[i] != export_rec[i])
+    //    {
+    //        std::cerr << "mismatch at #" << i << std::endl;
+    //        return -1;
+    //    }
+    //}
+    //
+    
+    rbt::RBTree tree;
+    std::vector<int> data = {1, 2, 3};
+    for(auto i: data)
     {
-        orig.push_back(i);
         tree.insert(i);
     }
 
-    std::vector<int> export_iter, export_rec;
-
-    
-    CLOG_TIMEIT_START;
-    tree.export_inorder_recursive(export_rec);
-    CLOG_TIMEIT_END("recursive export");
-    CLOG_TIMEIT_START;
-    tree.export_inorder_iterative(export_iter);
-    CLOG_TIMEIT_END("iterative export");
-
-    for(auto i: orig)
+    for(auto i: tree)
     {
-        if(export_iter[i] != export_rec[i])
+        for(auto j: tree)
         {
-            std::cerr << "mismatch at #" << i << std::endl;
-            return -1;
+            std::cout << i << ", " << j << std::endl;
         }
     }
     

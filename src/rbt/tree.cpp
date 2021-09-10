@@ -8,8 +8,6 @@ namespace rbt
     RBTree::RBTree(void)
     {
         m_root = NULL;
-        m_marker_mask = 0;
-        m_marker_sanity = 1;
         m_count = 0;
     }
     RBTree::RBTree(RBTree & orig)
@@ -19,8 +17,6 @@ namespace rbt
         {
             m_root = new Node(*orig.m_root);
         }
-        m_marker_mask = orig.m_marker_mask;
-        m_marker_sanity = orig.m_marker_sanity;
         m_count = orig.m_count;
     }
     RBTree::~RBTree(void)
@@ -33,12 +29,11 @@ namespace rbt
     }
     RBTree::RBTIterator RBTree::begin()
     {
-        repair_markers_if_needed();
-        // This is a hacky workaround because
-        // the iterator would point to the root but it must
-        // point to the smallest element.
-        m_marker_sanity = 0;
-        return ++RBTIterator(this, m_root);
+        if(m_root == NULL)
+        {
+            return RBTIterator(this, NULL);
+        }
+        return RBTIterator(this, m_root->get_leftmost());
     }
     RBTree::RBTIterator RBTree::end()
     {
@@ -49,7 +44,7 @@ namespace rbt
         // Empty tree. Just add a (black) root node.
         if(m_root == NULL)
         {
-            m_root = new Node(NULL, value, m_marker_mask);
+            m_root = new Node(NULL, value);
             m_root->m_color = NODE_BLACK;
             return NULL;
         }
@@ -69,7 +64,7 @@ namespace rbt
                     continue;
                 }
                 // The higher node is a leaf. Replace it with the new node.
-                Node * n_node = new Node(c_node, value, m_marker_mask);
+                Node * n_node = new Node(c_node, value);
                 c_node->m_higher = n_node;
                 if(c_node->m_color == NODE_RED)
                 {
@@ -89,7 +84,7 @@ namespace rbt
                     continue;
                 }
                 // Insert the new node.
-                Node * n_node = new Node(c_node, value, m_marker_mask);
+                Node * n_node = new Node(c_node, value);
                 c_node->m_lower = n_node;
                 if(c_node->m_color == NODE_RED)
                 {
@@ -105,19 +100,6 @@ namespace rbt
         throw std::runtime_error("failed to insert value for unknown reasons");
     }
 
-    inline void RBTree::repair_markers_if_needed(void)
-    {
-        if(!m_marker_sanity)
-        {
-            if(m_root == NULL)
-            {
-                m_marker_sanity = 1;
-                return;
-            }
-            m_root->repair_markers(m_marker_mask);
-            m_marker_sanity = 1;
-        }
-    }
 
     void RBTree::repair_after_insert(Node * causing_node)
     {
@@ -673,38 +655,10 @@ int RBTree::rbt_pathlength(void)
             return;
         }
 
-        repair_markers_if_needed();
-        Node * c_node = m_root;
-        m_marker_sanity = 0;
-        while(c_node != NULL)
+        for(auto i: *this)
         {
-            if((c_node->m_marker ^ m_marker_mask) == 0)
-            {
-                // 1st time visiting the node.
-                c_node->m_marker ^= 0b01;
-                if(c_node->m_lower != NULL)
-                {
-                    c_node = c_node->m_lower;
-                }
-                continue;
-            }
-            if((c_node->m_marker ^ m_marker_mask) == 0b01)
-            {
-                // 2nd time visiting the node.
-
-                vect.push_back(c_node->m_value);
-                c_node->m_marker ^= 0b110; // We need the 3rd bit for iterators.
-                if(c_node->m_higher != NULL)
-                {
-                    c_node = c_node->m_higher;
-                }
-                continue;
-            }
-            c_node = c_node->m_parent;
+            vect.push_back(i);
         }
-        m_marker_sanity = 1;
-        m_marker_mask ^= 0b111;
-        
     }
 
     size_t RBTree::size(void)
@@ -727,8 +681,8 @@ int RBTree::rbt_pathlength(void)
         }
     }
 
-    Node::Node(Node * parent, int value, char marker):
-        m_parent(parent), m_value(value), m_marker(marker)
+    Node::Node(Node * parent, int value):
+        m_parent(parent), m_value(value)
     {
         m_color = NODE_RED;
         m_higher = m_lower = NULL;
@@ -738,7 +692,6 @@ int RBTree::rbt_pathlength(void)
         m_parent = NULL;
         m_color = orig.m_color;
         m_value = orig.m_value;
-        m_marker = orig.m_marker;
         if(orig.m_lower != NULL)
         {
             m_lower = new Node(this, orig.m_lower);
@@ -761,7 +714,6 @@ int RBTree::rbt_pathlength(void)
         m_parent = parent;
         m_color = orig->m_color;
         m_value = orig->m_value;
-        m_marker = orig->m_marker;
         if(orig->m_lower != NULL)
         {
             m_lower = new Node(this, orig->m_lower);
@@ -814,18 +766,6 @@ int RBTree::rbt_pathlength(void)
     }
 
 
-    void Node::repair_markers(char marker)
-    {
-        if(m_lower != NULL)
-        {
-            m_lower->repair_markers(marker);
-        }
-        m_marker = marker;
-        if(m_higher != NULL)
-        {
-            m_higher->repair_markers(marker);
-        }
-    }
 
     void Node::dot_edges(std::ostream & stream)
     {
@@ -894,5 +834,14 @@ int RBTree::rbt_pathlength(void)
             return lleft + 1;
         }
         return lleft;
+    }
+    Node * Node::get_leftmost(void)
+    {
+        Node * c_node = this;
+        while(c_node->m_lower != NULL)
+        {
+            c_node = c_node->m_lower;
+        }
+        return c_node;
     }
 }
