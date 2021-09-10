@@ -39,6 +39,18 @@ namespace rbt
     {
         return RBTIterator(this, NULL);
     }
+    int RBTree::get_element_excluding(int exclude)
+    {
+        if(m_root->m_value != exclude)
+        {
+            return m_root->m_value;
+        }
+        if(m_root->m_lower != NULL)
+        {
+            return m_root->m_lower->m_value;
+        }
+        return m_root->m_higher->m_value;
+    }
     Node * RBTree::do_insert(int value)
     {
         // Empty tree. Just add a (black) root node.
