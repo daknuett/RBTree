@@ -19,6 +19,15 @@ namespace rbt
         }
         m_count = orig.m_count;
     }
+    RBTree::RBTree(RBTree const & orig)
+    {
+        m_root = NULL;
+        if(orig.m_root != NULL)
+        {
+            m_root = new Node(*orig.m_root);
+        }
+        m_count = orig.m_count;
+    }
     RBTree::~RBTree(void)
     {
         if(m_root != NULL)
