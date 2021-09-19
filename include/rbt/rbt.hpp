@@ -58,6 +58,7 @@ namespace rbt
         int rbt_pathlength(void);
         RBTree(void);
         RBTree(RBTree & orig);
+        RBTree(RBTree const & orig);
         ~RBTree(void);
         size_t size(void);
         // WARNING: This method does not check whether
